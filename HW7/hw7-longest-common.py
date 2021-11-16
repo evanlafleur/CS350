@@ -1,5 +1,6 @@
 #Longest Common Subsequence
 
+
 #  J F A Y P U
 #J * . . . . .
 #W . . . . . .
