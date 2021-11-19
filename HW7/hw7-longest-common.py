@@ -16,12 +16,38 @@ import random
 
 #Brute Force Implementation
 def bf_lcs(array1, array2, m, n):
-    if(m == 0 or n == 0):
-        return 0;
-    elif(array1[m-1] == array2[n-1]):
-        return 1 + bf_lcs(array1, array2, m-1, n-1);
-    else:
-        return max(bf_lcs(array1, array2, m, n-1), bf_lcs(array1, array2, m-1, n));
+    table = [[0 for x in range(n + 1)] for x in range(m + 1)]
+
+    # Building the mtrix in bottom-up way
+    for i in range(m + 1):
+        for j in range(n + 1):
+            if i == 0 or j == 0:
+                table[i][j] = 0
+            elif array1[i - 1] == array2[j - 1]:
+                table[i][j] = table[i - 1][j - 1] + 1
+            else:
+                table[i][j] = max(table[i - 1][j], table[i][j - 1])
+
+    index = table[m][n]
+
+    lcs_array = [""] * (index + 1)
+    lcs_array[index] = ""
+
+    i = m
+    j = n
+    while i > 0 and j > 0:
+
+        if array1[i - 1] == array2[j - 1]:
+            lcs_array[index - 1] = array1[i - 1]
+            i -= 1
+            j -= 1
+            index -= 1
+
+        elif table[i - 1][j] > table[i][j - 1]:
+            i -= 1
+        else:
+            j -= 1
+    return (len(lcs_array) - 1)
 
 def dyn_lcs(array1, array2):
     m = len(array1)
@@ -34,7 +60,7 @@ def dyn_lcs(array1, array2):
     #tmp_store contains the length of the following...
     # X[0 -> i-1] & Y[0 -> j-1]
 
-    tmp_store = [[None] * (n+1) for i in xrange(m+1)]
+    tmp_store = [[None] * (n+1) for i in range(m+1)]
 
     for i in range(m+1):
         for j in range(n+1):
@@ -55,22 +81,23 @@ def average(array):
 
 
 
-print " --------- Base Tests: ----------"
-X = "AGGTAB"
-Y = "GXTXAYB"
+print(" --------- Base Tests: ----------")
+X = input("Enter original String: ")
+Y = input("Enter new String: ")
 bf_start = time.time()
 bf_count = bf_lcs(X, Y, len(X), len(Y))
 bf_end = time.time()
-print "Test: ", bf_count, "| Time cost: ", bf_end-bf_start
+print("Brute Force Test LCS Length: ", bf_count, "|\nTime cost: ",
+      bf_end - bf_start)
 
 dyn_start = time.time()
 dyn_count = dyn_lcs(X, Y)
 dyn_end = time.time()
-print "Dyn Test: ", dyn_count, "| Time cost: ", dyn_end-dyn_start
+print("Dyn Test: ", dyn_count, "| Time cost: ", dyn_end-dyn_start)
 
 test_cases = 5000
-print "-------- Extensive Tests: -------"
-print "Tests Run: ", test_cases
+print("-------- Extensive Tests: -------")
+print("Tests Run: ", test_cases)
 bf_results = []
 dyn_results = []
 for i in range(test_cases):
@@ -89,8 +116,8 @@ for i in range(test_cases):
     dyn_duration = dyn_end - dyn_start
     dyn_results.append(dyn_duration)
 
-print "Brute Force Average Time Cost: ", average(bf_results), " milliseconds"
-print "Dynamic Average Time Cost: ", average(dyn_results), " milliseconds"
+print("Brute Force Average Time Cost: ", average(bf_results), " milliseconds")
+print("Dynamic Average Time Cost: ", average(dyn_results), " milliseconds")
 
 
 
