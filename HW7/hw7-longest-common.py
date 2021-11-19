@@ -13,6 +13,7 @@
 import time
 import string
 import random
+from random import randrange
 
 #Brute Force Implementation
 def bf_lcs(array1, array2, m, n):
@@ -101,8 +102,10 @@ print("Tests Run: ", test_cases)
 bf_results = []
 dyn_results = []
 for i in range(test_cases):
-    stringA = id_generator()
-    stringB = id_generator()
+    size = randrange(2, 50)
+    stringA = id_generator(size)
+    size = randrange(1, len(stringA))
+    stringB = id_generator(size)
 
     bf_start = time.time()
     bf_test = bf_lcs(stringA, stringB, len(stringA), len(stringB))
@@ -116,9 +119,15 @@ for i in range(test_cases):
     dyn_duration = dyn_end - dyn_start
     dyn_results.append(dyn_duration)
 
-print("Brute Force Average Time Cost: ", average(bf_results), " milliseconds")
-print("Dynamic Average Time Cost: ", average(dyn_results), " milliseconds")
-
-
-
-
+print("Brute Force Average Time Cost:\n",
+      average(bf_results),
+      " milliseconds",
+      sep="")
+print("Dynamic Average Time Cost:\n",
+      average(dyn_results),
+      " milliseconds",
+      sep="")
+print("------------ Example: -----------")
+print("String A: ", stringA, "\nLength: ", len(stringA), sep="")
+print("String B:", stringB, "\nLength: ", len(stringB))
+print("LCS Length:", dyn_test)
